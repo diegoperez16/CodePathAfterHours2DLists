@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Ghost, DoorOpen, Key, Skull, CheckCircle, Users } from 'lucide-react';
+import { Ghost, DoorOpen, Skull, CheckCircle } from 'lucide-react';
 import { initPython, runPythonCode } from './pythonRunner';
 import './storageService'; // Initialize storage
 
@@ -11,8 +11,6 @@ const HauntedMansion = () => {
   const [output, setOutput] = useState('');
   const [isCorrect, setIsCorrect] = useState(false);
   const [completedExercises, setCompletedExercises] = useState([]);
-  const [showLeaderboard, setShowLeaderboard] = useState(false);
-  const [leaderboardData, setLeaderboardData] = useState([]);
   const [pythonReady, setPythonReady] = useState(false);
   const [isRunning, setIsRunning] = useState(false);
 
@@ -210,60 +208,6 @@ for row in result:
     }
   };
 
-  const loadLeaderboard = async () => {
-    try {
-      const keys = await window.storage.list('record:', true);
-      if (keys && keys.keys) {
-        const students = [];
-        for (const key of keys.keys) {
-          try {
-            const result = await window.storage.get(key, true);
-            if (result) {
-              students.push(JSON.parse(result.value));
-            }
-          } catch (error) {
-            console.log('Could not load student:', key);
-          }
-        }
-        students.sort((a, b) => b.completedCount - a.completedCount);
-        setLeaderboardData(students);
-      }
-    } catch (error) {
-      console.error('Error loading leaderboard:', error);
-    }
-  };
-
-  const downloadRecords = () => {
-    const data = leaderboardData.map(student => ({
-      Name: student.name,
-      'Completed Count': student.completedCount,
-      'Completed Exercises': student.completedTitles ? student.completedTitles.join('; ') : '',
-      'Last Activity': new Date(student.lastCompleted).toLocaleString()
-    }));
-
-    // Convert to CSV
-    const headers = Object.keys(data[0] || {});
-    const csv = [
-      headers.join(','),
-      ...data.map(row => headers.map(header => {
-        const value = row[header] || '';
-        // Escape commas and quotes
-        return `"${String(value).replace(/"/g, '""')}"`;
-      }).join(','))
-    ].join('\n');
-
-    // Download
-    const blob = new Blob([csv], { type: 'text/csv' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `student-records-${new Date().toISOString().split('T')[0]}.csv`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-  };
-
   const downloadMyProgress = () => {
     const completedTitles = completedExercises.map(idx => exercises[idx].title);
     
@@ -388,77 +332,6 @@ Please submit this file in Moodle.
     );
   }
 
-  if (showLeaderboard) {
-    return (
-      <div className="min-h-screen bg-gradient-to-b from-purple-900 via-purple-800 to-black text-white p-8">
-        <div className="max-w-4xl mx-auto">
-          <button
-            onClick={() => {
-              setShowLeaderboard(false);
-              loadLeaderboard();
-            }}
-            className="mb-4 text-purple-300 hover:text-white"
-          >
-            ← Back to Exercises
-          </button>
-          
-          <div className="text-center mb-8">
-            <Users className="w-16 h-16 mx-auto mb-4" />
-            <h2 className="text-3xl font-bold">Student Records</h2>
-            <p className="text-purple-300 mt-2">Track who completed which exercises</p>
-          </div>
-
-          <div className="bg-purple-800 bg-opacity-50 p-6 rounded-lg backdrop-blur">
-            <div className="flex gap-2 mb-4">
-              <button
-                onClick={loadLeaderboard}
-                className="bg-purple-600 hover:bg-purple-500 px-4 py-2 rounded"
-              >
-                🔄 Refresh Data
-              </button>
-              {leaderboardData.length > 0 && (
-                <button
-                  onClick={downloadRecords}
-                  className="bg-green-600 hover:bg-green-500 px-4 py-2 rounded"
-                >
-                  📥 Download CSV
-                </button>
-              )}
-            </div>
-
-            {leaderboardData.length === 0 ? (
-              <p className="text-center text-purple-300">No student records yet.</p>
-            ) : (
-              <div className="space-y-3">
-                {leaderboardData.map((student, idx) => (
-                  <div key={idx} className="bg-purple-900 bg-opacity-50 p-4 rounded">
-                    <div className="flex justify-between items-start mb-2">
-                      <div>
-                        <span className="font-bold text-lg">{student.name}</span>
-                        <span className="text-purple-300 ml-2">
-                          ({student.completedCount} / {exercises.length} completed)
-                        </span>
-                      </div>
-                      <div className="text-sm text-purple-400">
-                        {new Date(student.lastCompleted).toLocaleString()}
-                      </div>
-                    </div>
-                    {student.completedTitles && student.completedTitles.length > 0 && (
-                      <div className="text-sm text-purple-200 mt-2">
-                        <span className="font-semibold">Completed: </span>
-                        {student.completedTitles.join(', ')}
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   const exercise = exercises[currentExercise];
 
   return (
@@ -470,25 +343,13 @@ Please submit this file in Moodle.
             <h1 className="text-2xl font-bold">Welcome, {studentName}!</h1>
             <p className="text-purple-300">Progress: {completedExercises.length} / {exercises.length} rooms escaped</p>
           </div>
-          <div className="flex gap-2">
-            <button
-              onClick={downloadMyProgress}
-              className="bg-green-600 hover:bg-green-500 px-4 py-2 rounded flex items-center gap-2"
-              title="Download your completion report to submit to instructor"
-            >
-              📥 Download My Report
-            </button>
-            <button
-              onClick={() => {
-                setShowLeaderboard(true);
-                loadLeaderboard();
-              }}
-              className="bg-purple-600 hover:bg-purple-500 px-4 py-2 rounded flex items-center gap-2"
-            >
-              <Users className="w-5 h-5" />
-              Student Records
-            </button>
-          </div>
+          <button
+            onClick={downloadMyProgress}
+            className="bg-green-600 hover:bg-green-500 px-4 py-2 rounded flex items-center gap-2"
+            title="Download your completion report to submit to instructor"
+          >
+            📥 Download My Report
+          </button>
         </div>
 
         {/* Exercise Navigation */}
