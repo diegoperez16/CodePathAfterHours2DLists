@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2D Arrays - Halloween Edition</title>
+    <style>
+        @page {
+            size: 1280px 720px;
+            margin: 0;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #4a1a4a 50%, #000000 100%);
+            color: white;
+        }
+        
+        .slide {
+            width: 1280px;
+            height: 720px;
+            padding: 60px 80px;
+            page-break-after: always;
+            background: linear-gradient(135deg, #1a1a2e 0%, #4a1a4a 50%, #000000 100%);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .slide::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border: 8px solid #ff6b1a;
+            pointer-events: none;
+        }
+        
+        h1 {
+            font-size: 72px;
+            color: #ff6b1a;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        
+        h2 {
+            font-size: 48px;
+            color: #b794f6;
+            margin-bottom: 40px;
+        }
+        
+        h3 {
+            font-size: 36px;
+            color: #ff6b1a;
+            margin-bottom: 20px;
+        }
+        
+        p, li {
+            font-size: 28px;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        
+        .center {
+            text-align: center;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .emoji-large {
+            font-size: 120px;
+            margin: 40px 0;
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        .box {
+            background: rgba(76, 29, 149, 0.5);
+            border: 4px solid #ff6b1a;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px 0;
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin: 30px 0;
+        }
+        
+        .grid-item {
+            background: rgba(76, 29, 149, 0.8);
+            border: 3px solid #ff6b1a;
+            padding: 20px;
+            text-align: center;
+            font-size: 48px;
+            border-radius: 10px;
+        }
+        
+        pre {
+            background: #000;
+            color: #4ade80;
+            padding: 25px;
+            border-radius: 10px;
+            font-size: 22px;
+            line-height: 1.5;
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+        
+        .two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .bullet {
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+            margin-bottom: 25px;
+        }
+        
+        .bullet-icon {
+            font-size: 48px;
+            flex-shrink: 0;
+        }
+        
+        .answer-box {
+            background: #16a34a;
+            border: 4px solid #22c55e;
+            padding: 25px;
+            text-align: center;
+            font-size: 36px;
+            font-weight: bold;
+            border-radius: 10px;
+            margin-top: 30px;
+        }
+        
+        .options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .option {
+            background: rgba(76, 29, 149, 0.8);
+            border: 3px solid #ff6b1a;
+            padding: 20px;
+            text-align: center;
+            font-size: 28px;
+            border-radius: 10px;
+        }
+        
+        .visual-index {
+            margin-top: 30px;
+        }
+        
+        .index-header {
+            display: grid;
+            grid-template-columns: 100px repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .index-row {
+            display: grid;
+            grid-template-columns: 100px repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .index-label {
+            color: #ff6b1a;
+            font-weight: bold;
+            font-size: 32px;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .subtitle {
+            color: #9ca3af;
+            font-size: 32px;
+        }
+        
+        @media print {
+            .slide {
+                page-break-after: always;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Slide 1: Title -->
+<div class="slide center">
+    <div class="emoji-large">🎃</div>
+    <h1>2D Arrays 👻</h1>
+    <h2>The Haunted Mansion Edition</h2>
+    <p style="font-size: 36px; color: #ff6b1a;">CIIC 3015 - After Hours</p>
+    <p class="subtitle">Happy Halloween! 🦇</p>
+</div>
+
+<!-- Slide 2: Goals -->
+<div class="slide">
+    <h1>Goals of this session 🕸️</h1>
+    <div class="bullet">
+        <span class="bullet-icon">👻</span>
+        <p>Understand what 2D arrays are (arrays of arrays!)</p>
+    </div>
+    <div class="bullet">
+        <span class="bullet-icon">🧛</span>
+        <p>Learn how to access elements using row and column indices</p>
+    </div>
+    <div class="bullet">
+        <span class="bullet-icon">🎃</span>
+        <p>Practice nested loops to traverse 2D arrays</p>
+    </div>
+    <div class="bullet">
+        <span class="bullet-icon">🦇</span>
+        <p>Solve spooky practice problems!</p>
+    </div>
+</div>
+
+<!-- Slide 3: Why -->
+<div class="slide">
+    <h1>Why do 2D Arrays Matter? 🏚️</h1>
+    <div class="box">
+        <h3>First, a spooky scenario... 🌙</h3>
+        <p>🏚️ Imagine you're exploring a haunted mansion with 5 floors and 4 rooms per floor</p>
+        <p>👻 Each room might contain ghosts, candy, or be empty</p>
+        <p>🗺️ How do we keep track of what's in each room?</p>
+    </div>
+    <p style="text-align: center; font-size: 36px; color: #ff6b1a; margin-top: 40px;">
+        We need a grid! That's where 2D arrays come in! 🎃
+    </p>
+</div>
+
+<!-- Slide 4: What is -->
+<div class="slide">
+    <h1>What is a 2D Array? 🕷️</h1>
+    <div class="box">
+        <p style="font-size: 32px;">A 2D array is an <span style="color: #ff6b1a; font-weight: bold;">array of arrays</span></p>
+        <p>Think of it as a grid or table with rows and columns!</p>
+    </div>
+    <pre>haunted_mansion = [
+    ["👻", "🎃", "🦇", "💀"],
+    ["🕷️", "🧛", "👻", "🎃"],
+    ["💀", "🦇", "🕸️", "👻"],
+]</pre>
+    <div class="grid">
+        <div class="grid-item">👻</div>
+        <div class="grid-item">🎃</div>
+        <div class="grid-item">🦇</div>
+        <div class="grid-item">💀</div>
+        <div class="grid-item">🕷️</div>
+        <div class="grid-item">🧛</div>
+        <div class="grid-item">👻</div>
+        <div class="grid-item">🎃</div>
+        <div class="grid-item">💀</div>
+        <div class="grid-item">🦇</div>
+        <div class="grid-item">🕸️</div>
+        <div class="grid-item">👻</div>
+    </div>
+</div>
+
+<!-- Slide 5: Indexing -->
+<div class="slide">
+    <h1>2D Array Indexing 🎯</h1>
+    <div class="box">
+        <p style="font-size: 32px;">Access elements using: <span style="color: #ff6b1a; font-family: monospace;">array[row][column]</span></p>
+        <p>Both row and column indices start at 0!</p>
+    </div>
+    <pre>mansion = [
+    ["👻", "🎃", "🦇"],
+    ["🕷️", "🧛", "👻"],
+]
+
+print(mansion[0][0])  # Output: 👻
+print(mansion[1][1])  # Output: 🧛
+print(mansion[0][2])  # Output: 🦇</pre>
+</div>
+
+<!-- Slide 6: Visual Guide -->
+<div class="slide">
+    <h1>Visual Guide to Indexing 🗺️</h1>
+    <p style="text-align: center; color: #ff6b1a; font-size: 32px;">Column indices →</p>
+    <div class="visual-index">
+        <div class="index-header">
+            <div></div>
+            <div class="index-label">0</div>
+            <div class="index-label">1</div>
+            <div class="index-label">2</div>
+        </div>
+        <div class="index-row">
+            <div class="index-label">0</div>
+            <div class="grid-item">👻</div>
+            <div class="grid-item">🎃</div>
+            <div class="grid-item">🦇</div>
+        </div>
+        <div class="index-row">
+            <div class="index-label">1</div>
+            <div class="grid-item">🕷️</div>
+            <div class="grid-item">🧛</div>
+            <div class="grid-item">👻</div>
+        </div>
+        <div class="index-row">
+            <div class="index-label">2</div>
+            <div class="grid-item">💀</div>
+            <div class="grid-item">🦇</div>
+            <div class="grid-item">🕸️</div>
+        </div>
+    </div>
+    <p style="text-align: center; color: #9ca3af; margin-top: 30px;">↑ Row indices</p>
+</div>
+
+<!-- Slide 7: Rows and Columns -->
+<div class="slide">
+    <h1>Understanding Rows & Columns 📐</h1>
+    <div class="two-col">
+        <div class="box">
+            <h3>Rows (Floors) 🏚️</h3>
+            <p>Horizontal lines</p>
+            <pre>rows = len(mansion)
+
+floor_0 = mansion[0]</pre>
+        </div>
+        <div class="box">
+            <h3>Columns (Rooms) 🚪</h3>
+            <p>Vertical lines</p>
+            <pre>cols = len(mansion[0])
+
+room = mansion[0][2]</pre>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 8: Nested Loops -->
+<div class="slide">
+    <h1>Traversing with Nested Loops 🔄</h1>
+    <div class="box">
+        <p style="font-size: 32px;">To visit every room in the haunted mansion, we need nested loops!</p>
+        <p style="color: #ff6b1a;">Outer loop → Rows (floors)</p>
+        <p style="color: #b794f6;">Inner loop → Columns (rooms)</p>
+    </div>
+    <pre>mansion = [
+    ["👻", "🎃", "🦇"],
+    ["🕷️", "🧛", "👻"],
+]
+
+# Visit every room!
+for row in range(len(mansion)):
+    for col in range(len(mansion[row])):
+        print(f"[{row}][{col}]: {mansion[row][col]}")</pre>
+</div>
+
+<!-- Slide 9: Loop Output -->
+<div class="slide">
+    <h1>What Does This Print? 🤔</h1>
+    <pre>mansion = [
+    ["👻", "🎃", "🦇"],
+    ["🕷️", "🧛", "👻"]
+]
+
+for row in range(len(mansion)):
+    for col in range(len(mansion[row])):
+        print(mansion[row][col], end=" ")
+    print()  # New line after each row</pre>
+    <div class="box">
+        <h3 style="color: #ff6b1a;">Output:</h3>
+        <pre style="font-size: 36px;">👻 🎃 🦇
+🕷️ 🧛 👻</pre>
+    </div>
+    <p style="text-align: center; font-size: 32px; margin-top: 30px;">
+        The nested loop prints each row on a new line! 🎃
+    </p>
+</div>
+
+<!-- Slide 10: Check 1 -->
+<div class="slide">
+    <h1>👻 Checking Understanding 👻</h1>
+    <div class="box">
+        <p style="font-size: 32px; margin-bottom: 20px;">What is the output?</p>
+        <pre>candy = [
+    [5, 10, 15],
+    [20, 25, 30]
+]
+
+print(candy[1][2])</pre>
+        <div class="options">
+            <div class="option">a. 10</div>
+            <div class="option">b. 25</div>
+            <div class="option">c. 15</div>
+            <div class="option">d. 30</div>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 11: Answer 1 -->
+<div class="slide">
+    <h1>👻 Answer 👻</h1>
+    <pre>candy = [
+    [5, 10, 15],
+    [20, 25, 30]
+]
+
+print(candy[1][2])</pre>
+    <div class="answer-box">d. 30 ✓</div>
+    <p style="text-align: center; font-size: 32px; margin-top: 40px;">
+        Row 1, Column 2 = 30 🎃
+    </p>
+</div>
+
+<!-- Slide 12: Check 2 -->
+<div class="slide">
+    <h1>👻 Checking Understanding 👻</h1>
+    <div class="box">
+        <p style="font-size: 32px; margin-bottom: 20px;">What is the output?</p>
+        <pre>spooky = [
+    ["🎃", "👻"],
+    ["🦇", "🕷️"],
+    ["💀", "🧛"]
+]
+
+for i in range(len(spooky)):
+    print(spooky[i][0])</pre>
+        <div class="options">
+            <div class="option">a. 🎃 🦇 💀</div>
+            <div class="option">b. all elements</div>
+            <div class="option">c. 🎃 👻</div>
+            <div class="option">d. error</div>
+        </div>
+    </div>
+</div>
+
+<!-- Slide 13: Answer 2 -->
+<div class="slide">
+    <h1>👻 Answer 👻</h1>
+    <pre>spooky = [
+    ["🎃", "👻"],
+    ["🦇", "🕷️"],
+    ["💀", "🧛"]
+]
+
+for i in range(len(spooky)):
+    print(spooky[i][0])</pre>
+    <div class="answer-box">a. 🎃 🦇 💀 ✓</div>
+    <p style="text-align: center; font-size: 32px; margin-top: 40px;">
+        We're printing the first column (index 0) of each row! 🕸️
+    </p>
+</div>
+
+<!-- Slide 14: Practice -->
+<div class="slide center">
+    <div style="font-size: 100px; margin-bottom: 40px;">🧟‍♂️👻🎃</div>
+    <h1 style="margin-bottom: 30px;">🎃 Practice Problems 🎃</h1>
+    <p style="font-size: 48px; color: #ff6b1a;">Time to Practice!</p>
+    <p style="font-size: 32px; margin-top: 30px;">In groups of 2-3, solve spooky problems using 2D arrays!</p>
+</div>
+
+<!-- Slide 15: Problem 1 -->
+<div class="slide">
+    <h1>Problem #1: Count the Ghosts 👻</h1>
+    <div class="box">
+        <p style="font-size: 30px; margin-bottom: 20px;">
+            Write a function <span style="color: #ff6b1a; font-family: monospace;">count_ghosts(mansion)</span> 
+            that counts how many ghosts (👻) are in the entire haunted mansion.
+        </p>
+        <pre>mansion = [
+    ["👻", "🎃", "🦇"],
+    ["🕷️", "👻", "👻"],
+    ["💀", "🦇", "🕸️"]
+]
+
+count_ghosts(mansion)
+# Output: 3</pre>
+    </div>
+</div>
+
+<!-- Slide 16: Solution Process 1 -->
+<div class="slide">
+    <h1>Solution Breakdown 🧠</h1>
+    <div class="box" style="font-size: 32px;">
+        <p>1. Define the function that takes a 2D array</p>
+        <p>2. Initialize a counter = 0</p>
+        <p>3. Use nested loops to check every room</p>
+        <p>4. If we find a "👻", increment counter</p>
+        <p>5. Return the counter</p>
+    </div>
+</div>
+
+<!-- Slide 17: Solution 1 -->
+<div class="slide">
+    <h1>Solution - Step-by-Step 🎯</h1>
+    <pre>def count_ghosts(mansion):
+    # Initialize counter
+    count = 0
+    
+    # Outer loop: iterate through rows
+    for row in range(len(mansion)):
+        # Inner loop: iterate through columns
+        for col in range(len(mansion[row])):
+            # Check if current element is a ghost
+            if mansion[row][col] == "👻":
+                count += 1
+    
+    # Return total count
+    return count</pre>
+</div>
+
+<!-- Slide 18: Problem 2 -->
+<div class="slide">
+    <h1>Problem #2: Trick-or-Treat Total 🍬</h1>
+    <div class="box">
+        <p style="font-size: 30px; margin-bottom: 20px;">
+            Write a function <span style="color: #ff6b1a; font-family: monospace;">total_candy(neighborhood)</span> 
+            that returns the total number of candies collected from all houses.
+        </p>
+        <pre>neighborhood = [
+    [5, 10, 3],
+    [7, 2, 8],
+    [4, 6, 9]
+]
+
+total_candy(neighborhood)
+# Output: 54</pre>
+    </div>
+</div>
+
+<!-- Slide 19: Solution Process 2 -->
+<div class="slide">
+    <h1>Solution Breakdown 🧠</h1>
+    <div class="box" style="font-size: 32px;">
+        <p>1. Define the function</p>
+        <p>2. Initialize total = 0</p>
+        <p>3. Use nested loops to visit each house</p>
+        <p>4. Add each house's candy count to total</p>
+        <p>5. Return total</p>
+    </div>
+</div>
+
+<!-- Slide 20: Solution 2 -->
+<div class="slide">
+    <h1>Solution - Step-by-Step 🎯</h1>
+    <pre>def total_candy(neighborhood):
+    # Initialize total
+    total = 0
+    
+    # Loop through each row (street)
+    for row in range(len(neighborhood)):
+        # Loop through each column (house)
+        for col in range(len(neighborhood[row])):
+            # Add candy from this house
+            total += neighborhood[row][col]
+    
+    # Return total candy
+    return total</pre>
+</div>
+
+<!-- Slide 21: Problem 3 -->
+<div class="slide">
+    <h1>Problem #3: Find the Vampire 🧛</h1>
+    <div class="box">
+        <p style="font-size: 30px; margin-bottom: 20px;">
+            Write a function <span style="color: #ff6b1a; font-family: monospace;">find_vampire(mansion)</span> 
+            that returns the position [row, col] of the vampire (🧛). If there's no vampire, return None.
+        </p>
+        <pre>mansion = [
+    ["👻", "🎃", "🦇"],
+    ["🕷️", "🧛", "👻"],
+    ["💀", "🦇", "🕸️"]
+]
+
+find_vampire(mansion)
+# Output: [1, 1]</pre>
+    </div>
+</div>
+
+<!-- Slide 22: Solution Process 3 -->
+<div class="slide">
+    <h1>Solution Breakdown 🧠</h1>
+    <div class="box" style="font-size: 32px;">
+        <p>1. Define the function</p>
+        <p>2. Use nested loops to search each room</p>
+        <p>3. When we find "🧛", return [row, col]</p>
+        <p>4. If we finish searching and didn't find it, return None</p>
+    </div>
+</div>
+
+<!-- Slide 23: Solution 3 -->
+<div class="slide">
+    <h1>Solution - Step-by-Step 🎯</h1>
+    <pre>def find_vampire(mansion):
+    # Loop through rows
+    for row in range(len(mansion)):
+        # Loop through columns
+        for col in range(len(mansion[row])):
+            # Check if we found the vampire
+            if mansion[row][col] == "🧛":
+                # Return position immediately
+                return [row, col]
+    
+    # If we get here, no vampire found
+    return None</pre>
+</div>
+
+<!-- Slide 24: Problem 4 -->
+<div class="slide">
+    <h1>Problem #4: Spooky Row Sums 🎃</h1>
+    <div class="box">
+        <p style="font-size: 30px; margin-bottom: 20px;">
+            Write a function <span style="color: #ff6b1a; font-family: monospace;">row_sums(grid)</span> 
+            that prints the sum of each row in a 2D array.
+        </p>
+        <pre>grid = [
+    [1, 2, 3],
+    [4, 5, 6],
+    [7, 8, 9]
+]
+
+row_sums(grid)
+# Output:
+# Row 0: 6
+# Row 1: 15
+# Row 2: 24</pre>
+    </div>
+</div>
+
+<!-- Slide 25: Solution Process 4 -->
+<div class="slide">
+    <h1>Solution Breakdown 🧠</h1>
+    <div class="box" style="font-size: 32px;">
+        <p>1. Define the function</p>
+        <p>2. Loop through each row</p>
+        <p>3. For each row, initialize a sum = 0</p>
+        <p>4. Loop through columns in that row and add to sum</p>
+        <p>5. Print the row number and its sum</p>
+    </div>
+</div>
+
+<!-- Slide 26: Solution 4 -->
+<div class="slide">
+    <h1>Solution - Step-by-Step 🎯</h1>
+    <pre>def row_sums(grid):
+    # Loop through each row
+    for row in range(len(grid)):
+        # Initialize sum for this row
+        row_sum = 0
+        
+        # Loop through each column in this row
+        for col in range(len(grid[row])):
+            # Add element to row sum
+            row_sum += grid[row][col]
+        
+        # Print result for this row
+        print(f"Row {row}: {row_sum}")</pre>
+</div>
+
+<!-- Slide 27: Closing -->
+<div class="slide center">
+    <div style="font-size: 100px; margin-bottom: 40px;">🎃👻🦇</div>
+    <h1 style="margin-bottom: 30px;">Great Job! 🎉</h1>
+    <p style="font-size: 48px; color: #ff6b1a; margin-bottom: 40px;">You've Mastered 2D Arrays!</p>
+    <div class="box" style="text-align: left; max-width: 800px;">
+        <h3 style="text-align: center; margin-bottom: 30px;">Key Takeaways:</h3>
+        <p style="font-size: 28px;">✓ 2D arrays are arrays of arrays (grids)</p>
+        <p style="font-size: 28px;">✓ Access elements with [row][column]</p>
+        <p style="font-size: 28px;">✓ Use nested loops to traverse</p>
+        <p style="font-size: 28px;">✓ Outer loop = rows, Inner loop = columns</p>
+    </div>
+    <p style="font-size: 36px; margin-top: 40px;">Happy Halloween! 🎃👻</p>
+</div>
+
+</body>
+</html>
