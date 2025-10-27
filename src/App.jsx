@@ -13,7 +13,7 @@ const HauntedMansion = () => {
   const [completedExercises, setCompletedExercises] = useState([]);
   const [pythonReady, setPythonReady] = useState(false);
   const [isRunning, setIsRunning] = useState(false);
-  const [hoveredCell, setHoveredCell] = useState(null);
+  const [selectedCell, setSelectedCell] = useState(null);
 
   const exercises = [
     {
@@ -166,6 +166,7 @@ for row in result:
       setCode(exercises[currentExercise].starterCode);
       setOutput(pythonReady ? 'Ready to run your code!' : 'Loading Python...');
       setIsCorrect(false);
+      setSelectedCell(null); // Clear selected cell when changing exercise
     }
   }, [currentExercise, pythonReady]);
 
@@ -414,12 +415,22 @@ Please submit this file in Moodle.
               <div className="bg-black bg-opacity-50 p-4 rounded mb-4">
                 <h3 className="font-bold mb-3">The Mansion Layout:</h3>
                 
-                {/* Show hovered cell info */}
-                {hoveredCell && (
+                {/* Show selected cell info */}
+                {selectedCell ? (
                   <div className="mb-3 p-2 bg-cyan-900 bg-opacity-50 border border-cyan-500 rounded text-center">
                     <span className="font-mono text-cyan-300">
-                      mansion[{hoveredCell.row}][{hoveredCell.col}] = '{hoveredCell.value}'
+                      mansion[{selectedCell.row}][{selectedCell.col}] = '{selectedCell.value}'
                     </span>
+                    <button
+                      onClick={() => setSelectedCell(null)}
+                      className="ml-3 text-xs bg-cyan-700 hover:bg-cyan-600 px-2 py-1 rounded"
+                    >
+                      Clear
+                    </button>
+                  </div>
+                ) : (
+                  <div className="mb-3 p-2 bg-purple-900 bg-opacity-30 border border-purple-500 rounded text-center text-sm text-purple-300">
+                    Click on any cell to see its array position
                   </div>
                 )}
                 
@@ -446,18 +457,21 @@ Please submit this file in Moodle.
                         <div className="w-10 h-14 flex items-center justify-center text-sm font-bold text-cyan-400">
                           {rowIdx}
                         </div>
-                        {row.map((cell, colIdx) => (
-                          <div
-                            key={`${rowIdx}-${colIdx}`}
-                            className={`w-14 h-14 flex flex-col items-center justify-center border-2 rounded ${getCellStyle(cell)} transition-all hover:scale-110 hover:shadow-lg hover:z-10 relative cursor-pointer`}
-                            title={`mansion[${rowIdx}][${colIdx}] = '${cell}'`}
-                            onMouseEnter={() => setHoveredCell({ row: rowIdx, col: colIdx, value: cell })}
-                            onMouseLeave={() => setHoveredCell(null)}
-                          >
-                            <span className="text-2xl">{getCellEmoji(cell)}</span>
-                            <span className="text-xs font-mono mt-1">{cell}</span>
-                          </div>
-                        ))}
+                        {row.map((cell, colIdx) => {
+                          const isSelected = selectedCell && selectedCell.row === rowIdx && selectedCell.col === colIdx;
+                          return (
+                            <div
+                              key={`${rowIdx}-${colIdx}`}
+                              className={`w-14 h-14 flex flex-col items-center justify-center border-2 rounded ${getCellStyle(cell)} transition-all hover:scale-105 hover:shadow-lg hover:z-10 relative cursor-pointer
+                                ${isSelected ? 'ring-4 ring-cyan-400 scale-110' : ''}
+                              `}
+                              onClick={() => setSelectedCell({ row: rowIdx, col: colIdx, value: cell })}
+                            >
+                              <span className="text-2xl">{getCellEmoji(cell)}</span>
+                              <span className="text-xs font-mono mt-1">{cell}</span>
+                            </div>
+                          );
+                        })}
                       </div>
                     ))}
                   </div>
