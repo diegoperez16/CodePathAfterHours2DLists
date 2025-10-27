@@ -416,13 +416,31 @@ Please submit this file in Moodle.
                 {/* Visual Grid */}
                 <div className="mb-4 flex justify-center">
                   <div className="inline-block">
+                    {/* Column indices header */}
+                    <div className="flex gap-1 mb-1">
+                      <div className="w-10"></div> {/* Empty corner */}
+                      {exercise.mansion[0].map((_, colIdx) => (
+                        <div
+                          key={`col-${colIdx}`}
+                          className="w-14 h-8 flex items-center justify-center text-sm font-bold text-cyan-400"
+                        >
+                          {colIdx}
+                        </div>
+                      ))}
+                    </div>
+                    
+                    {/* Grid with row indices */}
                     {exercise.mansion.map((row, rowIdx) => (
                       <div key={rowIdx} className="flex gap-1 mb-1">
+                        {/* Row index */}
+                        <div className="w-10 h-14 flex items-center justify-center text-sm font-bold text-cyan-400">
+                          {rowIdx}
+                        </div>
                         {row.map((cell, colIdx) => (
                           <div
                             key={`${rowIdx}-${colIdx}`}
-                            className={`w-14 h-14 flex flex-col items-center justify-center border-2 rounded ${getCellStyle(cell)} transition-all hover:scale-110`}
-                            title={`[${rowIdx}][${colIdx}] = ${cell}`}
+                            className={`w-14 h-14 flex flex-col items-center justify-center border-2 rounded ${getCellStyle(cell)} transition-all hover:scale-110 hover:shadow-lg hover:z-10 relative`}
+                            title={`mansion[${rowIdx}][${colIdx}] = '${cell}'`}
                           >
                             <span className="text-2xl">{getCellEmoji(cell)}</span>
                             <span className="text-xs font-mono mt-1">{cell}</span>
@@ -430,6 +448,12 @@ Please submit this file in Moodle.
                         ))}
                       </div>
                     ))}
+                    
+                    {/* Index labels */}
+                    <div className="text-xs text-cyan-300 mt-2 text-center">
+                      <span className="font-semibold">↑ columns (j) →</span>
+                      <span className="ml-4">← rows (i) ↓</span>
+                    </div>
                   </div>
                 </div>
 
