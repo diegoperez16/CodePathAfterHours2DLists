@@ -16,9 +16,11 @@ const HauntedMansion = () => {
   const [selectedCell, setSelectedCell] = useState(null);
 
   const exercises = [
+    // ===== EASY EXERCISES =====
     {
       title: "Room 1: The Entrance Hall",
       description: "You enter a dark mansion. The rooms are arranged in a 3x3 grid. Find all the doors (represented by 'D').",
+      difficulty: "easy",
       mansion: [
         ['W', 'D', 'W'],
         ['D', 'R', 'D'],
@@ -42,6 +44,7 @@ print(count_doors(mansion))`,
     {
       title: "Room 2: The Ghost Gallery",
       description: "Ghosts hide in certain rooms! You need to find the position of the first ghost.",
+      difficulty: "easy",
       mansion: [
         ['R', 'R', 'W'],
         ['W', 'G', 'R'],
@@ -65,6 +68,7 @@ print(find_ghost(mansion))`,
     {
       title: "Room 3: The Key Chamber",
       description: "You need 3 keys to escape! Count how many keys are in each row.",
+      difficulty: "easy",
       mansion: [
         ['K', 'W', 'K'],
         ['W', 'K', 'W'],
@@ -88,6 +92,7 @@ print(keys_per_row(mansion))`,
     {
       title: "Room 4: The Safe Path",
       description: "Some rooms are safe ('S'), others are trapped ('T'). Check if a path is all safe.",
+      difficulty: "easy",
       mansion: [
         ['T', 'S', 'T'],
         ['S', 'S', 'S'],
@@ -112,6 +117,7 @@ print(is_path_safe(mansion, 0))  # Should be False`,
     {
       title: "Room 5: The Final Escape",
       description: "Replace all trapped rooms with safe rooms to escape the mansion!",
+      difficulty: "easy",
       mansion: [
         ['S', 'T', 'S'],
         ['T', 'T', 'S'],
@@ -133,6 +139,38 @@ for row in result:
     print(row)`,
       expectedOutput: "['S', 'S', 'S']\n['S', 'S', 'S']\n['S', 'S', 'S']",
       hint: "Loop through each row and each cell, replacing 'T' with 'S'"
+    },
+    
+    // ===== HARD EXERCISES =====
+    {
+      title: "🔥 Challenge: The Treasure Map",
+      description: "A 4x4 mansion has multiple treasures ('X'). Find the coordinates of ALL treasures and calculate the total 'distance' between adjacent treasures. Distance is the sum of differences in row and column positions (Manhattan distance).",
+      difficulty: "hard",
+      mansion: [
+        ['R', 'X', 'R', 'W'],
+        ['W', 'R', 'R', 'X'],
+        ['X', 'W', 'R', 'R'],
+        ['R', 'R', 'X', 'W']
+      ],
+      task: "Write a function treasure_distance(mansion) that finds all treasures and calculates the total Manhattan distance between consecutive treasure pairs. Return a tuple: (list of coordinates, total distance). Treasures should be found in row-major order (left-to-right, top-to-bottom).",
+      starterCode: `def treasure_distance(mansion):
+    # Your code here
+    # 1. Find all 'X' positions as (row, col) tuples
+    # 2. Calculate Manhattan distance between consecutive pairs
+    # 3. Manhattan distance = |row1-row2| + |col1-col2|
+    pass
+
+# Test your function
+mansion = [
+    ['R', 'X', 'R', 'W'],
+    ['W', 'R', 'R', 'X'],
+    ['X', 'W', 'R', 'R'],
+    ['R', 'R', 'X', 'W']
+]
+result = treasure_distance(mansion)
+print(result)`,
+      expectedOutput: "([(0, 1), (1, 3), (2, 0), (3, 2)], 10)",
+      hint: "First, collect all treasure positions. Then, for each consecutive pair, calculate |r1-r2| + |c1-c2| and sum them up. Remember: distance from (0,1) to (1,3) is |0-1| + |1-3| = 1 + 2 = 3"
     }
   ];
 
@@ -270,7 +308,8 @@ Please submit this file in Moodle.
       'G': '👻', // Ghost
       'K': '🔑', // Key
       'S': '✅', // Safe
-      'T': '⚠️'  // Trap
+      'T': '⚠️',  // Trap
+      'X': '💎'  // Treasure
     };
     return emojiMap[cell] || '❓';
   };
@@ -280,11 +319,12 @@ Please submit this file in Moodle.
     const styleMap = {
       'W': 'bg-gray-700 border-gray-600',
       'D': 'bg-amber-800 border-amber-600',
-      'R': 'bg-purple-700 border-purple-500',
+      'R': 'bg-teal-700 border-teal-500',
       'G': 'bg-indigo-800 border-indigo-600',
       'K': 'bg-yellow-700 border-yellow-500',
       'S': 'bg-green-700 border-green-500',
-      'T': 'bg-red-800 border-red-600'
+      'T': 'bg-red-800 border-red-600',
+      'X': 'bg-cyan-700 border-cyan-500'
     };
     return styleMap[cell] || 'bg-gray-800 border-gray-600';
   };
@@ -332,27 +372,27 @@ Please submit this file in Moodle.
 
   if (!isLoggedIn) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-purple-900 via-purple-800 to-black text-white p-8">
+      <div className="min-h-screen bg-gradient-to-b from-teal-900 via-teal-800 to-gray-900 text-white p-8">
         <div className="max-w-md mx-auto mt-20">
           <div className="text-center mb-8">
             <Ghost className="w-20 h-20 mx-auto mb-4 animate-bounce" />
             <h1 className="text-4xl font-bold mb-2">🏚️ Haunted Mansion</h1>
-            <p className="text-purple-200">2D Array Practice Adventure</p>
+            <p className="text-teal-200">2D Array Practice Adventure</p>
           </div>
           
-          <div className="bg-purple-800 bg-opacity-50 p-6 rounded-lg backdrop-blur">
+          <div className="bg-teal-800 bg-opacity-50 p-6 rounded-lg backdrop-blur">
             <label className="block mb-2 text-sm">Enter your name to begin:</label>
             <input
               type="text"
               value={studentName}
               onChange={(e) => setStudentName(e.target.value)}
               onKeyPress={(e) => e.key === 'Enter' && handleLogin()}
-              className="w-full p-3 rounded bg-purple-900 border border-purple-600 focus:outline-none focus:border-purple-400 mb-4"
+              className="w-full p-3 rounded bg-teal-900 border border-teal-600 focus:outline-none focus:border-teal-400 mb-4"
               placeholder="Your name..."
             />
             <button
               onClick={handleLogin}
-              className="w-full bg-purple-600 hover:bg-purple-500 p-3 rounded font-bold transition"
+              className="w-full bg-emerald-600 hover:bg-emerald-500 p-3 rounded font-bold transition"
             >
               Enter the Mansion
             </button>
@@ -363,15 +403,17 @@ Please submit this file in Moodle.
   }
 
   const exercise = exercises[currentExercise];
+  const easyExercises = exercises.filter(ex => ex.difficulty === 'easy');
+  const hardExercises = exercises.filter(ex => ex.difficulty === 'hard');
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-purple-900 via-purple-800 to-black text-white p-4">
+    <div className="min-h-screen bg-gradient-to-b from-teal-900 via-teal-800 to-gray-900 text-white p-4">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="flex justify-between items-center mb-6">
           <div>
             <h1 className="text-2xl font-bold">Welcome, {studentName}!</h1>
-            <p className="text-purple-300">Progress: {completedExercises.length} / {exercises.length} rooms escaped</p>
+            <p className="text-teal-300">Progress: {completedExercises.length} / {exercises.length} rooms escaped</p>
           </div>
           <button
             onClick={downloadMyProgress}
@@ -382,35 +424,64 @@ Please submit this file in Moodle.
           </button>
         </div>
 
-        {/* Exercise Navigation */}
-        <div className="flex gap-2 mb-6 overflow-x-auto pb-2">
-          {exercises.map((ex, idx) => (
-            <button
-              key={idx}
-              onClick={() => setCurrentExercise(idx)}
-              className={`px-4 py-2 rounded whitespace-nowrap flex items-center gap-2 ${
-                currentExercise === idx
-                  ? 'bg-purple-600'
-                  : completedExercises.includes(idx)
-                  ? 'bg-green-700'
-                  : 'bg-purple-800'
-              }`}
-            >
-              {completedExercises.includes(idx) && <CheckCircle className="w-4 h-4" />}
-              Room {idx + 1}
-            </button>
-          ))}
+        {/* Exercise Navigation - Grouped by Difficulty */}
+        <div className="mb-6 space-y-3">
+          {/* Easy Section */}
+          <div>
+            <h3 className="text-sm font-semibold text-emerald-300 mb-2">📚 EASY</h3>
+            <div className="flex gap-2 flex-wrap">
+              {exercises.map((ex, idx) => ex.difficulty === 'easy' && (
+                <button
+                  key={idx}
+                  onClick={() => setCurrentExercise(idx)}
+                  className={`px-4 py-2 rounded whitespace-nowrap flex items-center gap-2 ${
+                    currentExercise === idx
+                      ? 'bg-emerald-600 ring-2 ring-emerald-400'
+                      : completedExercises.includes(idx)
+                      ? 'bg-green-700'
+                      : 'bg-teal-800'
+                  }`}
+                >
+                  {completedExercises.includes(idx) && <CheckCircle className="w-4 h-4" />}
+                  Room {idx + 1}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Hard Section */}
+          <div>
+            <h3 className="text-sm font-semibold text-orange-300 mb-2">🔥 HARD</h3>
+            <div className="flex gap-2 flex-wrap">
+              {exercises.map((ex, idx) => ex.difficulty === 'hard' && (
+                <button
+                  key={idx}
+                  onClick={() => setCurrentExercise(idx)}
+                  className={`px-4 py-2 rounded whitespace-nowrap flex items-center gap-2 ${
+                    currentExercise === idx
+                      ? 'bg-orange-600 ring-2 ring-orange-400'
+                      : completedExercises.includes(idx)
+                      ? 'bg-green-700'
+                      : 'bg-orange-800'
+                  }`}
+                >
+                  {completedExercises.includes(idx) && <CheckCircle className="w-4 h-4" />}
+                  Challenge {idx - easyExercises.length + 1}
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
 
         <div className="grid md:grid-cols-2 gap-6">
           {/* Left: Exercise Description */}
           <div className="space-y-4">
-            <div className="bg-purple-800 bg-opacity-50 p-6 rounded-lg backdrop-blur">
+            <div className="bg-teal-800 bg-opacity-50 p-6 rounded-lg backdrop-blur">
               <h2 className="text-2xl font-bold mb-2 flex items-center gap-2">
                 <DoorOpen className="w-6 h-6" />
                 {exercise.title}
               </h2>
-              <p className="text-purple-200 mb-4">{exercise.description}</p>
+              <p className="text-teal-200 mb-4">{exercise.description}</p>
               
               <div className="bg-black bg-opacity-50 p-4 rounded mb-4">
                 <h3 className="font-bold mb-3">The Mansion Layout:</h3>
@@ -429,7 +500,7 @@ Please submit this file in Moodle.
                     </button>
                   </div>
                 ) : (
-                  <div className="mb-3 p-2 bg-purple-900 bg-opacity-30 border border-purple-500 rounded text-center text-sm text-purple-300">
+                  <div className="mb-3 p-2 bg-teal-900 bg-opacity-30 border border-teal-500 rounded text-center text-sm text-teal-300">
                     Click on any cell to see its array position
                   </div>
                 )}
@@ -479,7 +550,7 @@ Please submit this file in Moodle.
 
                 {/* Text representation */}
                 <details className="cursor-pointer">
-                  <summary className="text-xs text-purple-300 hover:text-purple-100">
+                  <summary className="text-xs text-teal-300 hover:text-teal-100">
                     Show as text/array
                   </summary>
                   <div className="font-mono text-sm space-y-1 mt-2">
@@ -489,7 +560,7 @@ Please submit this file in Moodle.
                   </div>
                 </details>
                 
-                <div className="text-xs text-purple-300 mt-3 grid grid-cols-2 gap-1">
+                <div className="text-xs text-teal-300 mt-3 grid grid-cols-2 gap-1">
                   <div>🧱 W=Wall</div>
                   <div>🚪 D=Door</div>
                   <div>🏠 R=Room</div>
@@ -497,6 +568,7 @@ Please submit this file in Moodle.
                   <div>🔑 K=Key</div>
                   <div>✅ S=Safe</div>
                   <div>⚠️ T=Trap</div>
+                  <div>💎 X=Treasure</div>
                 </div>
               </div>
 
@@ -511,7 +583,7 @@ Please submit this file in Moodle.
               </div>
 
               {/* Quick Reference */}
-              <div className="mt-4 bg-purple-900 bg-opacity-40 border border-purple-500 p-3 rounded text-xs">
+              <div className="mt-4 bg-teal-900 bg-opacity-40 border border-teal-500 p-3 rounded text-xs">
                 <h4 className="font-bold mb-2 text-sm">📚 Quick Reference:</h4>
                 <div className="space-y-1 font-mono">
                   <div><span className="text-cyan-400">mansion[0][0]</span> = first row, first column (top-left)</div>
@@ -525,12 +597,12 @@ Please submit this file in Moodle.
 
           {/* Right: Code Editor */}
           <div className="space-y-4">
-            <div className="bg-purple-800 bg-opacity-50 p-4 rounded-lg backdrop-blur">
+            <div className="bg-teal-800 bg-opacity-50 p-4 rounded-lg backdrop-blur">
               <h3 className="font-bold mb-2">Your Python Code:</h3>
               <textarea
                 value={code}
                 onChange={(e) => setCode(e.target.value)}
-                className="w-full h-64 p-3 bg-black bg-opacity-50 rounded font-mono text-sm border border-purple-600 focus:outline-none focus:border-purple-400"
+                className="w-full h-64 p-3 bg-black bg-opacity-50 rounded font-mono text-sm border border-teal-600 focus:outline-none focus:border-teal-400"
                 spellCheck="false"
               />
               <button
@@ -538,7 +610,7 @@ Please submit this file in Moodle.
                 disabled={!pythonReady || isRunning}
                 className={`w-full mt-2 p-3 rounded font-bold transition ${
                   pythonReady && !isRunning
-                    ? 'bg-green-600 hover:bg-green-500'
+                    ? 'bg-emerald-600 hover:bg-emerald-500'
                     : 'bg-gray-600 cursor-not-allowed'
                 }`}
               >
@@ -546,7 +618,7 @@ Please submit this file in Moodle.
               </button>
             </div>
 
-            <div className="bg-purple-800 bg-opacity-50 p-4 rounded-lg backdrop-blur">
+            <div className="bg-teal-800 bg-opacity-50 p-4 rounded-lg backdrop-blur">
               <h3 className="font-bold mb-2">Output:</h3>
               <pre className="bg-black bg-opacity-50 p-3 rounded font-mono text-sm whitespace-pre-wrap min-h-[100px]">
                 {output || 'Click "Run Code" to see output...'}
@@ -556,7 +628,7 @@ Please submit this file in Moodle.
             {isCorrect && currentExercise < exercises.length - 1 && (
               <button
                 onClick={() => setCurrentExercise(currentExercise + 1)}
-                className="w-full bg-purple-600 hover:bg-purple-500 p-3 rounded font-bold transition"
+                className="w-full bg-emerald-600 hover:bg-emerald-500 p-3 rounded font-bold transition"
               >
                 Next Room →
               </button>
