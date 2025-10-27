@@ -13,6 +13,7 @@ const HauntedMansion = () => {
   const [completedExercises, setCompletedExercises] = useState([]);
   const [pythonReady, setPythonReady] = useState(false);
   const [isRunning, setIsRunning] = useState(false);
+  const [hoveredCell, setHoveredCell] = useState(null);
 
   const exercises = [
     {
@@ -413,6 +414,15 @@ Please submit this file in Moodle.
               <div className="bg-black bg-opacity-50 p-4 rounded mb-4">
                 <h3 className="font-bold mb-3">The Mansion Layout:</h3>
                 
+                {/* Show hovered cell info */}
+                {hoveredCell && (
+                  <div className="mb-3 p-2 bg-cyan-900 bg-opacity-50 border border-cyan-500 rounded text-center">
+                    <span className="font-mono text-cyan-300">
+                      mansion[{hoveredCell.row}][{hoveredCell.col}] = '{hoveredCell.value}'
+                    </span>
+                  </div>
+                )}
+                
                 {/* Visual Grid */}
                 <div className="mb-4 flex justify-center">
                   <div className="inline-block">
@@ -439,8 +449,10 @@ Please submit this file in Moodle.
                         {row.map((cell, colIdx) => (
                           <div
                             key={`${rowIdx}-${colIdx}`}
-                            className={`w-14 h-14 flex flex-col items-center justify-center border-2 rounded ${getCellStyle(cell)} transition-all hover:scale-110 hover:shadow-lg hover:z-10 relative`}
+                            className={`w-14 h-14 flex flex-col items-center justify-center border-2 rounded ${getCellStyle(cell)} transition-all hover:scale-110 hover:shadow-lg hover:z-10 relative cursor-pointer`}
                             title={`mansion[${rowIdx}][${colIdx}] = '${cell}'`}
+                            onMouseEnter={() => setHoveredCell({ row: rowIdx, col: colIdx, value: cell })}
+                            onMouseLeave={() => setHoveredCell(null)}
                           >
                             <span className="text-2xl">{getCellEmoji(cell)}</span>
                             <span className="text-xs font-mono mt-1">{cell}</span>
@@ -448,12 +460,6 @@ Please submit this file in Moodle.
                         ))}
                       </div>
                     ))}
-                    
-                    {/* Index labels */}
-                    <div className="text-xs text-cyan-300 mt-2 text-center">
-                      <span className="font-semibold">↑ columns (j) →</span>
-                      <span className="ml-4">← rows (i) ↓</span>
-                    </div>
                   </div>
                 </div>
 
@@ -481,13 +487,24 @@ Please submit this file in Moodle.
               </div>
 
               <div className="bg-yellow-900 bg-opacity-30 border border-yellow-600 p-3 rounded">
-                <h3 className="font-bold mb-1">Task:</h3>
+                <h3 className="font-bold mb-1">📝 Task:</h3>
                 <p className="text-sm">{exercise.task}</p>
               </div>
 
               <div className="mt-4 bg-blue-900 bg-opacity-30 border border-blue-600 p-3 rounded">
-                <h3 className="font-bold mb-1">💡 Hint:</h3>
-                <p className="text-sm">{exercise.hint}</p>
+                <h3 className="font-bold mb-2">💡 Hint:</h3>
+                <p className="text-sm mb-2">{exercise.hint}</p>
+              </div>
+
+              {/* Quick Reference */}
+              <div className="mt-4 bg-purple-900 bg-opacity-40 border border-purple-500 p-3 rounded text-xs">
+                <h4 className="font-bold mb-2 text-sm">📚 Quick Reference:</h4>
+                <div className="space-y-1 font-mono">
+                  <div><span className="text-cyan-400">mansion[0][0]</span> = first row, first column (top-left)</div>
+                  <div><span className="text-cyan-400">len(mansion)</span> = number of rows</div>
+                  <div><span className="text-cyan-400">len(mansion[0])</span> = number of columns</div>
+                  <div><span className="text-cyan-400">for row in mansion:</span> = iterate through each row</div>
+                </div>
               </div>
             </div>
           </div>
