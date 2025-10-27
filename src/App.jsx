@@ -14,36 +14,8 @@ const HauntedMansion = () => {
   const [pythonReady, setPythonReady] = useState(false);
   const [isRunning, setIsRunning] = useState(false);
   const [hoveredCell, setHoveredCell] = useState(null);
-  const [visitedCells, setVisitedCells] = useState([]);
-  const [currentPosition, setCurrentPosition] = useState(null);
 
   const exercises = [
-    {
-      title: "Room 0: Tutorial - Explore the Mansion",
-      description: "Learn how to navigate a 2D array! Your code will light up the path as you explore.",
-      mansion: [
-        ['🏠', '🏠', '🏠'],
-        ['🏠', '👻', '🏠'],
-        ['🏠', '🏠', '🏠']
-      ],
-      task: "Write code to visit every room in the mansion. Watch the grid light up as your loops traverse the array!",
-      starterCode: `# Visit every room in the mansion
-mansion = [
-    ['🏠', '🏠', '🏠'],
-    ['🏠', '👻', '🏠'],
-    ['🏠', '🏠', '🏠']
-]
-
-# Loop through each row
-for i in range(len(mansion)):
-    # Loop through each column
-    for j in range(len(mansion[i])):
-        # Print what we found at this position
-        print(f"Visiting [{i}][{j}]: {mansion[i][j]}")`,
-      expectedOutput: "Visiting [0][0]: 🏠\nVisiting [0][1]: 🏠\nVisiting [0][2]: 🏠\nVisiting [1][0]: 🏠\nVisiting [1][1]: 👻\nVisiting [1][2]: 🏠\nVisiting [2][0]: 🏠\nVisiting [2][1]: 🏠\nVisiting [2][2]: 🏠",
-      hint: "The outer loop goes through rows (i), the inner loop goes through columns (j)",
-      isInteractive: true
-    },
     {
       title: "Room 1: The Entrance Hall",
       description: "You enter a dark mansion. The rooms are arranged in a 3x3 grid. Find all the doors (represented by 'D').",
@@ -194,8 +166,6 @@ for row in result:
       setCode(exercises[currentExercise].starterCode);
       setOutput(pythonReady ? 'Ready to run your code!' : 'Loading Python...');
       setIsCorrect(false);
-      setVisitedCells([]); // Clear visited cells when changing exercise
-      setCurrentPosition(null);
     }
   }, [currentExercise, pythonReady]);
 
@@ -331,32 +301,11 @@ Please submit this file in Moodle.
     try {
       setIsRunning(true);
       setOutput('Running code...');
-      setVisitedCells([]); // Reset visited cells
       
       const exercise = exercises[currentExercise];
       
       // Run the actual Python code
       const result = await runPythonCode(code);
-      
-      // Parse output to extract visited cells for interactive exercises
-      if (exercise.isInteractive) {
-        const visitedPattern = /Visiting \[(\d+)\]\[(\d+)\]/g;
-        const matches = [...result.matchAll(visitedPattern)];
-        const visited = matches.map(match => ({
-          row: parseInt(match[1]),
-          col: parseInt(match[2])
-        }));
-        setVisitedCells(visited);
-        
-        // Animate the traversal
-        if (visited.length > 0) {
-          for (let i = 0; i < visited.length; i++) {
-            await new Promise(resolve => setTimeout(resolve, 300));
-            setCurrentPosition(visited[i]);
-          }
-          setTimeout(() => setCurrentPosition(null), 1000);
-        }
-      }
       
       setOutput(result);
       
@@ -497,36 +446,18 @@ Please submit this file in Moodle.
                         <div className="w-10 h-14 flex items-center justify-center text-sm font-bold text-cyan-400">
                           {rowIdx}
                         </div>
-                        {row.map((cell, colIdx) => {
-                          const isVisited = visitedCells.some(v => v.row === rowIdx && v.col === colIdx);
-                          const isCurrent = currentPosition && currentPosition.row === rowIdx && currentPosition.col === colIdx;
-                          
-                          return (
-                            <div
-                              key={`${rowIdx}-${colIdx}`}
-                              className={`w-14 h-14 flex flex-col items-center justify-center border-2 rounded ${getCellStyle(cell)} transition-all hover:scale-110 hover:shadow-lg hover:z-10 relative cursor-pointer
-                                ${isVisited ? 'ring-2 ring-green-400 bg-opacity-80' : ''}
-                                ${isCurrent ? 'ring-4 ring-yellow-400 animate-pulse scale-110' : ''}
-                              `}
-                              title={`mansion[${rowIdx}][${colIdx}] = '${cell}'`}
-                              onMouseEnter={() => setHoveredCell({ row: rowIdx, col: colIdx, value: cell })}
-                              onMouseLeave={() => setHoveredCell(null)}
-                            >
-                              <span className="text-2xl">{getCellEmoji(cell)}</span>
-                              <span className="text-xs font-mono mt-1">{cell}</span>
-                              {isVisited && !isCurrent && (
-                                <div className="absolute -top-1 -right-1 w-4 h-4 bg-green-500 rounded-full flex items-center justify-center text-xs">
-                                  ✓
-                                </div>
-                              )}
-                              {isCurrent && (
-                                <div className="absolute -top-2 -right-2 text-2xl">
-                                  👆
-                                </div>
-                              )}
-                            </div>
-                          );
-                        })}
+                        {row.map((cell, colIdx) => (
+                          <div
+                            key={`${rowIdx}-${colIdx}`}
+                            className={`w-14 h-14 flex flex-col items-center justify-center border-2 rounded ${getCellStyle(cell)} transition-all hover:scale-110 hover:shadow-lg hover:z-10 relative cursor-pointer`}
+                            title={`mansion[${rowIdx}][${colIdx}] = '${cell}'`}
+                            onMouseEnter={() => setHoveredCell({ row: rowIdx, col: colIdx, value: cell })}
+                            onMouseLeave={() => setHoveredCell(null)}
+                          >
+                            <span className="text-2xl">{getCellEmoji(cell)}</span>
+                            <span className="text-xs font-mono mt-1">{cell}</span>
+                          </div>
+                        ))}
                       </div>
                     ))}
                   </div>
@@ -553,24 +484,6 @@ Please submit this file in Moodle.
                   <div>✅ S=Safe</div>
                   <div>⚠️ T=Trap</div>
                 </div>
-                
-                {/* Interactive exercise legend */}
-                {exercise.isInteractive && (
-                  <div className="mt-3 p-2 bg-green-900 bg-opacity-30 border border-green-500 rounded text-xs">
-                    <h4 className="font-bold mb-1">🎮 Interactive Mode:</h4>
-                    <div className="space-y-1">
-                      <div className="flex items-center gap-2">
-                        <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                        <span>Green checkmark = visited cell</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <span className="text-lg">👆</span>
-                        <span>Pointer = currently visiting</span>
-                      </div>
-                      <p className="text-green-300 mt-1">Run your code to see the traversal animation!</p>
-                    </div>
-                  </div>
-                )}
               </div>
 
               <div className="bg-yellow-900 bg-opacity-30 border border-yellow-600 p-3 rounded">
