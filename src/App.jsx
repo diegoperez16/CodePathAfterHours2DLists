@@ -259,6 +259,34 @@ Please submit this file in Moodle.
     }
   };
 
+  // Function to get emoji/icon for each cell type
+  const getCellEmoji = (cell) => {
+    const emojiMap = {
+      'W': '🧱', // Wall
+      'D': '🚪', // Door
+      'R': '🏠', // Room
+      'G': '👻', // Ghost
+      'K': '🔑', // Key
+      'S': '✅', // Safe
+      'T': '⚠️'  // Trap
+    };
+    return emojiMap[cell] || '❓';
+  };
+
+  // Function to get background color for each cell type
+  const getCellStyle = (cell) => {
+    const styleMap = {
+      'W': 'bg-gray-700 border-gray-600',
+      'D': 'bg-amber-800 border-amber-600',
+      'R': 'bg-purple-700 border-purple-500',
+      'G': 'bg-indigo-800 border-indigo-600',
+      'K': 'bg-yellow-700 border-yellow-500',
+      'S': 'bg-green-700 border-green-500',
+      'T': 'bg-red-800 border-red-600'
+    };
+    return styleMap[cell] || 'bg-gray-800 border-gray-600';
+  };
+
   const runCode = async () => {
     if (!pythonReady) {
       setOutput('Python is still loading... please wait.');
@@ -383,15 +411,49 @@ Please submit this file in Moodle.
               <p className="text-purple-200 mb-4">{exercise.description}</p>
               
               <div className="bg-black bg-opacity-50 p-4 rounded mb-4">
-                <h3 className="font-bold mb-2">The Mansion Layout:</h3>
-                <div className="font-mono text-sm space-y-1">
-                  {exercise.mansion.map((row, idx) => (
-                    <div key={idx}>{row.join(' ')}</div>
-                  ))}
+                <h3 className="font-bold mb-3">The Mansion Layout:</h3>
+                
+                {/* Visual Grid */}
+                <div className="mb-4 flex justify-center">
+                  <div className="inline-block">
+                    {exercise.mansion.map((row, rowIdx) => (
+                      <div key={rowIdx} className="flex gap-1 mb-1">
+                        {row.map((cell, colIdx) => (
+                          <div
+                            key={`${rowIdx}-${colIdx}`}
+                            className={`w-14 h-14 flex flex-col items-center justify-center border-2 rounded ${getCellStyle(cell)} transition-all hover:scale-110`}
+                            title={`[${rowIdx}][${colIdx}] = ${cell}`}
+                          >
+                            <span className="text-2xl">{getCellEmoji(cell)}</span>
+                            <span className="text-xs font-mono mt-1">{cell}</span>
+                          </div>
+                        ))}
+                      </div>
+                    ))}
+                  </div>
                 </div>
-                <p className="text-xs text-purple-300 mt-2">
-                  W=Wall, D=Door, R=Room, G=Ghost, K=Key, S=Safe, T=Trap
-                </p>
+
+                {/* Text representation */}
+                <details className="cursor-pointer">
+                  <summary className="text-xs text-purple-300 hover:text-purple-100">
+                    Show as text/array
+                  </summary>
+                  <div className="font-mono text-sm space-y-1 mt-2">
+                    {exercise.mansion.map((row, idx) => (
+                      <div key={idx}>{row.join(' ')}</div>
+                    ))}
+                  </div>
+                </details>
+                
+                <div className="text-xs text-purple-300 mt-3 grid grid-cols-2 gap-1">
+                  <div>🧱 W=Wall</div>
+                  <div>🚪 D=Door</div>
+                  <div>🏠 R=Room</div>
+                  <div>👻 G=Ghost</div>
+                  <div>🔑 K=Key</div>
+                  <div>✅ S=Safe</div>
+                  <div>⚠️ T=Trap</div>
+                </div>
               </div>
 
               <div className="bg-yellow-900 bg-opacity-30 border border-yellow-600 p-3 rounded">
