@@ -2,6 +2,8 @@
 
 An interactive Python learning platform for practicing 2D arrays, built with React and Pyodide.
 
+**Live Demo**: https://diegoperez16.github.io/CodePathAfterHours2DLists/
+
 ## Features
 
 - **Real Python Execution**: Uses Pyodide to run actual Python code in the browser
