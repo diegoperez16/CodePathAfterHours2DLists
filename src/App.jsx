@@ -218,11 +218,11 @@ for row in result:
       hint: "Loop through each row and each cell, replacing 'T' with 'S'"
     },
     
-    // ===== HARD EXERCISES =====
+    // ===== MEDIUM EXERCISES =====
     {
-      title: "🔥 Challenge: The Haunted Artifact Collection",
+      title: "⚡ Challenge: The Haunted Artifact Collection",
       description: "A 4x4 mansion contains various haunted artifacts. You need to catalog them by type and count unique symbols in each column.",
-      difficulty: "hard",
+      difficulty: "medium",
       mansion: [
         ['👻', '🔮', '👻', '🕯️'],
         ['🕯️', '👻', '🔮', '👻'],
@@ -263,6 +263,42 @@ print(unique)`,
         }
       ],
       hint: "Use a dictionary to count artifacts: artifact_counts = {}. For each cell, if it's in the dict, add 1; if not, set it to 1. For unique per column, use a set for each column to store unique values, then get len(set) for the count."
+    },
+    
+    // ===== HARD EXERCISES =====
+    {
+      title: "🔥 Master Challenge: The Mirror Mansion",
+      description: "A 4x4 mansion can be 'flipped' horizontally or vertically. Determine if the mansion is symmetric and find all matching pairs of opposite cells.",
+      difficulty: "hard",
+      mansion: [
+        ['🌟', '🔑', '🔑', '🌟'],
+        ['🚪', '⬜', '⬜', '🚪'],
+        ['🚪', '⬜', '⬜', '🚪'],
+        ['🌟', '🔑', '🔑', '🌟']
+      ],
+      task: "Write a function analyze_symmetry(mansion) that checks: 1) Is the mansion horizontally symmetric (left-right mirror)? 2) Is it vertically symmetric (top-bottom mirror)? 3) Count how many cells match their horizontal mirror position. Return: dictionary with keys 'horizontal_symmetric' (boolean), 'vertical_symmetric' (boolean), and 'matching_pairs' (integer)",
+      starterCode: `def analyze_symmetry(mansion):
+    # Your code here
+    # Horizontal symmetry: mansion[row][col] == mansion[row][num_cols-1-col]
+    # Vertical symmetry: mansion[row][col] == mansion[num_rows-1-row][col]
+    # Count matching pairs for horizontal reflection
+    pass
+
+# Test your function
+mansion = [
+    ['🌟', '🔑', '🔑', '🌟'],
+    ['🚪', '⬜', '⬜', '🚪'],
+    ['🚪', '⬜', '⬜', '🚪'],
+    ['🌟', '🔑', '🔑', '🌟']
+]
+result = analyze_symmetry(mansion)
+print(result)`,
+      expectedOutput: "{'horizontal_symmetric': True, 'vertical_symmetric': True, 'matching_pairs': 16}",
+      expectedOutputExample: {
+        test: "analyze_symmetry(mansion)",
+        result: "{'horizontal_symmetric': True, 'vertical_symmetric': True, 'matching_pairs': 16}"
+      },
+      hint: "For horizontal symmetry, compare each cell with its mirror: col_mirror = num_cols - 1 - col. For vertical, compare with row_mirror = num_rows - 1 - row. Use nested loops and boolean flags."
     }
   ];
 
@@ -623,6 +659,7 @@ Please submit this file in Moodle.
   const exercise = exercises[currentExercise];
   const tutorialExercises = exercises.filter(ex => ex.difficulty === 'tutorial');
   const easyExercises = exercises.filter(ex => ex.difficulty === 'easy');
+  const mediumExercises = exercises.filter(ex => ex.difficulty === 'medium');
   const hardExercises = exercises.filter(ex => ex.difficulty === 'hard');
 
   return (
@@ -691,9 +728,32 @@ Please submit this file in Moodle.
             </div>
           </div>
 
+          {/* Medium Section */}
+          <div>
+            <h3 className="text-sm font-semibold text-yellow-300 mb-2">⚡ MEDIUM</h3>
+            <div className="flex gap-2 flex-wrap">
+              {exercises.map((ex, idx) => ex.difficulty === 'medium' && (
+                <button
+                  key={idx}
+                  onClick={() => setCurrentExercise(idx)}
+                  className={`px-4 py-2 rounded whitespace-nowrap flex items-center gap-2 ${
+                    currentExercise === idx
+                      ? 'bg-yellow-600 ring-2 ring-yellow-400'
+                      : completedExercises.includes(idx)
+                      ? 'bg-green-700'
+                      : 'bg-yellow-800'
+                  }`}
+                >
+                  {completedExercises.includes(idx) && <CheckCircle className="w-4 h-4" />}
+                  Challenge {idx - tutorialExercises.length - easyExercises.length + 1}
+                </button>
+              ))}
+            </div>
+          </div>
+
           {/* Hard Section */}
           <div>
-            <h3 className="text-sm font-semibold text-orange-300 mb-2">🔥 HARD</h3>
+            <h3 className="text-sm font-semibold text-red-300 mb-2">🔥 HARD</h3>
             <div className="flex gap-2 flex-wrap">
               {exercises.map((ex, idx) => ex.difficulty === 'hard' && (
                 <button
@@ -701,14 +761,14 @@ Please submit this file in Moodle.
                   onClick={() => setCurrentExercise(idx)}
                   className={`px-4 py-2 rounded whitespace-nowrap flex items-center gap-2 ${
                     currentExercise === idx
-                      ? 'bg-orange-600 ring-2 ring-orange-400'
+                      ? 'bg-red-600 ring-2 ring-red-400'
                       : completedExercises.includes(idx)
                       ? 'bg-green-700'
-                      : 'bg-orange-800'
+                      : 'bg-red-800'
                   }`}
                 >
                   {completedExercises.includes(idx) && <CheckCircle className="w-4 h-4" />}
-                  Challenge {idx - tutorialExercises.length - easyExercises.length + 1}
+                  Master {idx - tutorialExercises.length - easyExercises.length - mediumExercises.length + 1}
                 </button>
               ))}
             </div>
@@ -823,6 +883,10 @@ Please submit this file in Moodle.
                   <div>🔑 K=Key</div>
                   <div>✅ S=Safe</div>
                   <div>⚠️ T=Trap</div>
+                  <div>🌟 Star</div>
+                  <div>👻 Artifact</div>
+                  <div>🔮 Crystal</div>
+                  <div>🕯️ Candle</div>
                 </div>
               </div>
 
