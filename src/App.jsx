@@ -67,7 +67,7 @@ matrix = [
         ['D', 'R', 'D'],
         ['W', 'D', 'W']
       ],
-      task: "Write a function count_doors(mansion) that returns the total number of doors ('D') in the mansion.",
+      task: "Write a function count_doors(mansion) that returns the total number of doors ('D') in the mansion. Return: integer",
       starterCode: `def count_doors(mansion):
     # Your code here
     pass
@@ -95,7 +95,7 @@ print(count_doors(mansion))`,
         ['W', 'G', 'R'],
         ['R', 'W', 'R']
       ],
-      task: "Write a function find_ghost(mansion) that returns the row and column of the first ghost ('G') as a tuple (row, col). If no ghost exists, return None.",
+      task: "Write a function find_ghost(mansion) that returns the row and column of the first ghost ('G') as a list [row, col]. If no ghost exists, return None. Return: list or None",
       starterCode: `def find_ghost(mansion):
     # Your code here
     pass
@@ -107,10 +107,10 @@ mansion = [
     ['R', 'W', 'R']
 ]
 print(find_ghost(mansion))`,
-      expectedOutput: "(1, 1)",
+      expectedOutput: "[1, 1]",
       expectedOutputExample: {
         test: "find_ghost(mansion)",
-        result: "(1, 1)"
+        result: "[1, 1]"
       },
       hint: "Use nested loops and return as soon as you find 'G'"
     },
@@ -123,7 +123,7 @@ print(find_ghost(mansion))`,
         ['W', 'K', 'W'],
         ['K', 'K', 'W']
       ],
-      task: "Write a function keys_per_row(mansion) that returns a list with the count of keys ('K') in each row.",
+      task: "Write a function keys_per_row(mansion) that returns a list with the count of keys ('K') in each row. Return: list of integers",
       starterCode: `def keys_per_row(mansion):
     # Your code here
     pass
@@ -151,7 +151,7 @@ print(keys_per_row(mansion))`,
         ['S', 'S', 'S'],
         ['T', 'S', 'T']
       ],
-      task: "Write a function is_path_safe(mansion, row) that checks if all rooms in the given row number are safe ('S'). Return True or False.",
+      task: "Write a function is_path_safe(mansion, row) that checks if all rooms in the given row number are safe ('S'). Return True or False. Return: boolean",
       starterCode: `def is_path_safe(mansion, row):
     # Your code here
     pass
@@ -186,7 +186,7 @@ print(is_path_safe(mansion, 0))  # Should be False`,
         ['T', 'T', 'S'],
         ['S', 'T', 'T']
       ],
-      task: "Write a function make_safe(mansion) that replaces all 'T' (traps) with 'S' (safe) and returns the modified mansion.",
+      task: "Write a function make_safe(mansion) that replaces all 'T' (traps) with 'S' (safe) and returns the modified mansion. Return: list of lists",
       starterCode: `def make_safe(mansion):
     # Your code here
     pass
@@ -220,38 +220,49 @@ for row in result:
     
     // ===== HARD EXERCISES =====
     {
-      title: "🔥 Challenge: The Treasure Map",
-      description: "A 4x4 mansion has multiple treasures ('X'). Find the coordinates of ALL treasures and calculate the total 'distance' between adjacent treasures. Distance is the sum of differences in row and column positions (Manhattan distance).",
+      title: "🔥 Challenge: The Haunted Artifact Collection",
+      description: "A 4x4 mansion contains various haunted artifacts. You need to catalog them by type and count unique symbols in each column.",
       difficulty: "hard",
       mansion: [
-        ['R', 'X', 'R', 'W'],
-        ['W', 'R', 'R', 'X'],
-        ['X', 'W', 'R', 'R'],
-        ['R', 'R', 'X', 'W']
+        ['👻', '🔮', '👻', '🕯️'],
+        ['🕯️', '👻', '🔮', '👻'],
+        ['🔮', '🕯️', '👻', '🔮'],
+        ['👻', '🔮', '🕯️', '👻']
       ],
-      task: "Write a function treasure_distance(mansion) that finds all treasures and calculates the total Manhattan distance between consecutive treasure pairs. Return a tuple: (list of coordinates, total distance). Treasures should be found in row-major order (left-to-right, top-to-bottom).",
-      starterCode: `def treasure_distance(mansion):
+      task: "Write a function catalog_artifacts(mansion) that returns a dictionary where keys are artifact types (emojis) and values are their total counts. Also, create a list showing how many UNIQUE artifacts are in each column. Return: dictionary (artifact counts) and list (unique per column)",
+      starterCode: `def catalog_artifacts(mansion):
     # Your code here
-    # 1. Find all 'X' positions as (row, col) tuples
-    # 2. Calculate Manhattan distance between consecutive pairs
-    # 3. Manhattan distance = |row1-row2| + |col1-col2|
+    # 1. Count how many times each artifact appears (use a dictionary)
+    # 2. For each column, count how many UNIQUE artifacts it has (use sets)
+    # 3. Return both: artifact_counts (dict) and unique_per_column (list)
     pass
 
 # Test your function
 mansion = [
-    ['R', 'X', 'R', 'W'],
-    ['W', 'R', 'R', 'X'],
-    ['X', 'W', 'R', 'R'],
-    ['R', 'R', 'X', 'W']
+    ['👻', '🔮', '👻', '🕯️'],
+    ['🕯️', '👻', '🔮', '👻'],
+    ['🔮', '🕯️', '👻', '🔮'],
+    ['👻', '🔮', '🕯️', '👻']
 ]
-result = treasure_distance(mansion)
-print(result)`,
-      expectedOutput: "([(0, 1), (1, 3), (2, 0), (3, 2)], 10)",
-      expectedOutputExample: {
-        test: "treasure_distance(mansion)",
-        result: "([(0, 1), (1, 3), (2, 0), (3, 2)], 10)"
-      },
-      hint: "First, collect all treasure positions. Then, for each consecutive pair, calculate |r1-r2| + |c1-c2| and sum them up. Remember: distance from (0,1) to (1,3) is |0-1| + |1-3| = 1 + 2 = 3"
+counts, unique = catalog_artifacts(mansion)
+print(counts)
+print(unique)`,
+      expectedOutput: "{'👻': 7, '🔮': 5, '🕯️': 4}\n[3, 3, 3, 3]",
+      expectedOutputExample: [
+        {
+          test: "counts, unique = catalog_artifacts(mansion)",
+          result: ""
+        },
+        {
+          test: "print(counts)",
+          result: "{'👻': 7, '🔮': 5, '🕯️': 4}"
+        },
+        {
+          test: "print(unique)",
+          result: "[3, 3, 3, 3]"
+        }
+      ],
+      hint: "Use a dictionary to count artifacts: artifact_counts = {}. For each cell, if it's in the dict, add 1; if not, set it to 1. For unique per column, use a set for each column to store unique values, then get len(set) for the count."
     }
   ];
 
@@ -812,7 +823,6 @@ Please submit this file in Moodle.
                   <div>🔑 K=Key</div>
                   <div>✅ S=Safe</div>
                   <div>⚠️ T=Trap</div>
-                  <div>💎 X=Treasure</div>
                 </div>
               </div>
 
