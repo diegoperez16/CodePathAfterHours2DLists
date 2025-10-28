@@ -2,6 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { Ghost, DoorOpen, Skull, CheckCircle } from 'lucide-react';
 import { initPython, runPythonCode } from './pythonRunner';
 import './storageService'; // Initialize storage
+import Editor from 'react-simple-code-editor';
+import { highlight, languages } from 'prismjs';
+import 'prismjs/components/prism-python';
+import 'prismjs/themes/prism-tomorrow.css';
 
 const HauntedMansion = () => {
   const [studentName, setStudentName] = useState('');
@@ -76,6 +80,10 @@ mansion = [
 ]
 print(count_doors(mansion))`,
       expectedOutput: "4",
+      expectedOutputExample: {
+        test: "count_doors(mansion)",
+        result: "4"
+      },
       hint: "Loop through each row, then each cell in the row, and count the 'D's"
     },
     {
@@ -100,6 +108,10 @@ mansion = [
 ]
 print(find_ghost(mansion))`,
       expectedOutput: "(1, 1)",
+      expectedOutputExample: {
+        test: "find_ghost(mansion)",
+        result: "(1, 1)"
+      },
       hint: "Use nested loops and return as soon as you find 'G'"
     },
     {
@@ -124,6 +136,10 @@ mansion = [
 ]
 print(keys_per_row(mansion))`,
       expectedOutput: "[2, 1, 2]",
+      expectedOutputExample: {
+        test: "keys_per_row(mansion)",
+        result: "[2, 1, 2]"
+      },
       hint: "Create an empty list, then for each row count the 'K's and append to the list"
     },
     {
@@ -149,6 +165,16 @@ mansion = [
 print(is_path_safe(mansion, 1))  # Should be True
 print(is_path_safe(mansion, 0))  # Should be False`,
       expectedOutput: "True\nFalse",
+      expectedOutputExample: [
+        {
+          test: "is_path_safe(mansion, 1)",
+          result: "True"
+        },
+        {
+          test: "is_path_safe(mansion, 0)",
+          result: "False"
+        }
+      ],
       hint: "Loop through all cells in mansion[row] and check if all are 'S'"
     },
     {
@@ -175,6 +201,20 @@ result = make_safe(mansion)
 for row in result:
     print(row)`,
       expectedOutput: "['S', 'S', 'S']\n['S', 'S', 'S']\n['S', 'S', 'S']",
+      expectedOutputExample: [
+        {
+          test: "for row in make_safe(mansion):",
+          result: "['S', 'S', 'S']"
+        },
+        {
+          test: "    print(row)",
+          result: "['S', 'S', 'S']"
+        },
+        {
+          test: "",
+          result: "['S', 'S', 'S']"
+        }
+      ],
       hint: "Loop through each row and each cell, replacing 'T' with 'S'"
     },
     
@@ -207,6 +247,10 @@ mansion = [
 result = treasure_distance(mansion)
 print(result)`,
       expectedOutput: "([(0, 1), (1, 3), (2, 0), (3, 2)], 10)",
+      expectedOutputExample: {
+        test: "treasure_distance(mansion)",
+        result: "([(0, 1), (1, 3), (2, 0), (3, 2)], 10)"
+      },
       hint: "First, collect all treasure positions. Then, for each consecutive pair, calculate |r1-r2| + |c1-c2| and sum them up. Remember: distance from (0,1) to (1,3) is |0-1| + |1-3| = 1 + 2 = 3"
     }
   ];
@@ -885,12 +929,22 @@ Please submit this file in Moodle.
               <>
                 <div className="bg-teal-800 bg-opacity-50 p-4 rounded-lg backdrop-blur">
                   <h3 className="font-bold mb-2">Your Python Code:</h3>
-                  <textarea
-                    value={code}
-                    onChange={(e) => setCode(e.target.value)}
-                    className="w-full h-64 p-3 bg-black bg-opacity-50 rounded font-mono text-sm border border-teal-600 focus:outline-none focus:border-teal-400"
-                    spellCheck="false"
-                  />
+                  <div className="border border-teal-600 rounded overflow-hidden bg-black bg-opacity-50">
+                    <Editor
+                      value={code}
+                      onValueChange={setCode}
+                      highlight={code => highlight(code, languages.python, 'python')}
+                      padding={12}
+                      style={{
+                        fontFamily: '"Fira Code", "Fira Mono", Consolas, Monaco, "Courier New", monospace',
+                        fontSize: 14,
+                        minHeight: '256px',
+                        backgroundColor: 'transparent',
+                      }}
+                      textareaClassName="focus:outline-none"
+                      preClassName="language-python"
+                    />
+                  </div>
                   <button
                     onClick={runCode}
                     disabled={!pythonReady || isRunning}
@@ -904,8 +958,40 @@ Please submit this file in Moodle.
                   </button>
                 </div>
 
+                {/* Expected Output Section */}
+                {exercise.expectedOutputExample && (
+                  <div className="bg-blue-900 bg-opacity-40 border border-blue-500 p-4 rounded-lg backdrop-blur">
+                    <h3 className="font-bold mb-3 text-blue-200">📋 Caso de Prueba (Test Case):</h3>
+                    <div className="overflow-x-auto">
+                      <table className="w-full border-collapse bg-white bg-opacity-10 rounded">
+                        <thead>
+                          <tr className="border-b-2 border-blue-400">
+                            <th className="text-left p-3 font-bold text-blue-200">Prueba</th>
+                            <th className="text-left p-3 font-bold text-blue-200">Resultado</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {Array.isArray(exercise.expectedOutputExample) ? (
+                            exercise.expectedOutputExample.map((testCase, idx) => (
+                              <tr key={idx} className="border-b border-blue-700 border-opacity-30">
+                                <td className="p-3 font-mono text-sm text-gray-200">{testCase.test}</td>
+                                <td className="p-3 font-mono text-sm text-green-300">{testCase.result}</td>
+                              </tr>
+                            ))
+                          ) : (
+                            <tr className="border-b border-blue-700 border-opacity-30">
+                              <td className="p-3 font-mono text-sm text-gray-200">{exercise.expectedOutputExample.test}</td>
+                              <td className="p-3 font-mono text-sm text-green-300">{exercise.expectedOutputExample.result}</td>
+                            </tr>
+                          )}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                )}
+
                 <div className="bg-teal-800 bg-opacity-50 p-4 rounded-lg backdrop-blur">
-                  <h3 className="font-bold mb-2">Output:</h3>
+                  <h3 className="font-bold mb-2">Your Output:</h3>
                   <pre className="bg-black bg-opacity-50 p-3 rounded font-mono text-sm whitespace-pre-wrap min-h-[100px]">
                     {output || 'Click "Run Code" to see output...'}
                   </pre>
