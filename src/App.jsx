@@ -220,43 +220,49 @@ for row in result:
     
     // ===== HARD EXERCISES =====
     {
-      title: "🔥 Challenge: The Portal Network",
-      description: "A 5x5 mansion has magical portals (🌀) scattered throughout. Calculate which portals are 'close neighbors' (Manhattan distance ≤ 2) and find portal clusters.",
+      title: "🔥 Challenge: The Haunted Artifact Collection",
+      description: "A 4x4 mansion contains various haunted artifacts. You need to catalog them by type and count unique symbols in each column.",
       difficulty: "hard",
       mansion: [
-        ['⬜', '🌀', '⬜', '⬜', '🌀'],
-        ['⬜', '⬜', '⬜', '🌀', '⬜'],
-        ['🌀', '⬜', '⬜', '⬜', '⬜'],
-        ['⬜', '⬜', '🌀', '⬜', '⬜'],
-        ['⬜', '🌀', '⬜', '⬜', '🌀']
+        ['👻', '🔮', '👻', '🕯️'],
+        ['🕯️', '👻', '🔮', '👻'],
+        ['🔮', '🕯️', '👻', '🔮'],
+        ['👻', '🔮', '🕯️', '👻']
       ],
-      task: "Write a function analyze_portals(mansion) that finds all portal positions and determines: 1) A set of all portals that have at least one neighbor within distance 2, 2) Total number of 'close pairs' (portals within distance 2 of each other). Manhattan distance = |row1-row2| + |col1-col2|. Return: dictionary with keys 'connected_portals' (set of positions as strings 'row,col') and 'close_pairs' (integer)",
-      starterCode: `def analyze_portals(mansion):
+      task: "Write a function catalog_artifacts(mansion) that returns a dictionary where keys are artifact types (emojis) and values are their total counts. Also, create a list showing how many UNIQUE artifacts are in each column. Return: dictionary (artifact counts) and list (unique per column)",
+      starterCode: `def catalog_artifacts(mansion):
     # Your code here
-    # 1. Find all portal (🌀) positions
-    # 2. For each pair of portals, calculate Manhattan distance
-    # 3. If distance <= 2, they are "close neighbors"
-    # 4. Track which portals have neighbors (use a set)
-    # 5. Count total close pairs
-    # Return a dictionary with results
+    # 1. Count how many times each artifact appears (use a dictionary)
+    # 2. For each column, count how many UNIQUE artifacts it has (use sets)
+    # 3. Return both: artifact_counts (dict) and unique_per_column (list)
     pass
 
 # Test your function
 mansion = [
-    ['⬜', '🌀', '⬜', '⬜', '🌀'],
-    ['⬜', '⬜', '⬜', '🌀', '⬜'],
-    ['🌀', '⬜', '⬜', '⬜', '⬜'],
-    ['⬜', '⬜', '🌀', '⬜', '⬜'],
-    ['⬜', '🌀', '⬜', '⬜', '🌀']
+    ['👻', '🔮', '👻', '🕯️'],
+    ['🕯️', '👻', '🔮', '👻'],
+    ['🔮', '🕯️', '👻', '🔮'],
+    ['👻', '🔮', '🕯️', '👻']
 ]
-result = analyze_portals(mansion)
-print(result)`,
-      expectedOutput: "{'connected_portals': {'0,1', '1,3', '2,0', '3,2', '4,1'}, 'close_pairs': 5}",
-      expectedOutputExample: {
-        test: "analyze_portals(mansion)",
-        result: "{'connected_portals': {'0,1', '1,3', '2,0', '3,2', '4,1'}, 'close_pairs': 5}"
-      },
-      hint: "Manhattan distance formula: abs(r1-r2) + abs(c1-c2). Store portal positions, then use nested loops to compare each portal with every other portal. Use a set to avoid duplicates for connected portals."
+counts, unique = catalog_artifacts(mansion)
+print(counts)
+print(unique)`,
+      expectedOutput: "{'👻': 7, '🔮': 5, '🕯️': 4}\n[3, 3, 3, 3]",
+      expectedOutputExample: [
+        {
+          test: "counts, unique = catalog_artifacts(mansion)",
+          result: ""
+        },
+        {
+          test: "print(counts)",
+          result: "{'👻': 7, '🔮': 5, '🕯️': 4}"
+        },
+        {
+          test: "print(unique)",
+          result: "[3, 3, 3, 3]"
+        }
+      ],
+      hint: "Use a dictionary to count artifacts: artifact_counts = {}. For each cell, if it's in the dict, add 1; if not, set it to 1. For unique per column, use a set for each column to store unique values, then get len(set) for the count."
     }
   ];
 
@@ -817,7 +823,6 @@ Please submit this file in Moodle.
                   <div>🔑 K=Key</div>
                   <div>✅ S=Safe</div>
                   <div>⚠️ T=Trap</div>
-                  <div>🌀 Portal</div>
                 </div>
               </div>
 
