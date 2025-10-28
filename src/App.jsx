@@ -67,7 +67,7 @@ matrix = [
         ['D', 'R', 'D'],
         ['W', 'D', 'W']
       ],
-      task: "Write a function count_doors(mansion) that returns the total number of doors ('D') in the mansion. Return: integer",
+      task: "Write a function <code>count_doors(mansion)</code> that returns the total number of doors (<code>'D'</code>) in the mansion.<br/><br/><strong>Return:</strong> integer",
       starterCode: `def count_doors(mansion):
     # Your code here
     pass
@@ -95,7 +95,7 @@ print(count_doors(mansion))`,
         ['W', 'G', 'R'],
         ['R', 'W', 'R']
       ],
-      task: "Write a function find_ghost(mansion) that returns the row and column of the first ghost ('G') as a list [row, col]. If no ghost exists, return None. Return: list or None",
+      task: "Write a function <code>find_ghost(mansion)</code> that returns the row and column of the first ghost (<code>'G'</code>) as a list <code>[row, col]</code>. If no ghost exists, return <code>None</code>.<br/><br/><strong>Return:</strong> list or None",
       starterCode: `def find_ghost(mansion):
     # Your code here
     pass
@@ -123,7 +123,7 @@ print(find_ghost(mansion))`,
         ['W', 'K', 'W'],
         ['K', 'K', 'W']
       ],
-      task: "Write a function keys_per_row(mansion) that returns a list with the count of keys ('K') in each row. Return: list of integers",
+      task: "Write a function <code>keys_per_row(mansion)</code> that returns a list with the count of keys (<code>'K'</code>) in each row.<br/><br/><strong>Return:</strong> list of integers",
       starterCode: `def keys_per_row(mansion):
     # Your code here
     pass
@@ -151,7 +151,7 @@ print(keys_per_row(mansion))`,
         ['S', 'S', 'S'],
         ['T', 'S', 'T']
       ],
-      task: "Write a function is_path_safe(mansion, row) that checks if all rooms in the given row number are safe ('S'). Return True or False. Return: boolean",
+      task: "Write a function <code>is_path_safe(mansion, row)</code> that checks if all rooms in the given row number are safe (<code>'S'</code>).<br/><br/><strong>Return:</strong> boolean (<code>True</code> or <code>False</code>)",
       starterCode: `def is_path_safe(mansion, row):
     # Your code here
     pass
@@ -186,7 +186,7 @@ print(is_path_safe(mansion, 0))  # Should be False`,
         ['T', 'T', 'S'],
         ['S', 'T', 'T']
       ],
-      task: "Write a function make_safe(mansion) that replaces all 'T' (traps) with 'S' (safe) and returns the modified mansion. Return: list of lists",
+      task: "Write a function <code>make_safe(mansion)</code> that replaces all <code>'T'</code> (traps) with <code>'S'</code> (safe) and returns the modified mansion.<br/><br/><strong>Return:</strong> list of lists",
       starterCode: `def make_safe(mansion):
     # Your code here
     pass
@@ -229,7 +229,14 @@ for row in result:
         ['🔮', '🕯️', '👻', '🔮'],
         ['👻', '🔮', '🕯️', '👻']
       ],
-      task: "Write a function catalog_artifacts(mansion) that returns a dictionary where keys are artifact types (emojis) and values are their total counts. Also, create a list showing how many UNIQUE artifacts are in each column. Return: dictionary (artifact counts) and list (unique per column)",
+      task: `Write a function <code>catalog_artifacts(mansion)</code> that analyzes the haunted artifacts:<br/><br/>
+<strong>The function should:</strong><br/>
+• Create a dictionary where keys are artifact types (emojis) and values are their total counts<br/>
+• Create a list showing how many UNIQUE artifacts are in each column<br/>
+• Return both values<br/><br/>
+<strong>Returns:</strong><br/>
+1. <code>artifact_counts</code> - dictionary<br/>
+2. <code>unique_per_column</code> - list of integers`,
       starterCode: `def catalog_artifacts(mansion):
     # Your code here
     # 1. Count how many times each artifact appears (use a dictionary)
@@ -276,7 +283,15 @@ print(unique)`,
         ['🚪', '⬜', '⬜', '🚪'],
         ['🌟', '🔑', '🔑', '🌟']
       ],
-      task: "Write a function analyze_symmetry(mansion) that checks: 1) Is the mansion horizontally symmetric (left-right mirror)? 2) Is it vertically symmetric (top-bottom mirror)? 3) Count how many cells match their horizontal mirror position. Return: dictionary with keys 'horizontal_symmetric' (boolean), 'vertical_symmetric' (boolean), and 'matching_pairs' (integer)",
+      task: `Write a function <code>analyze_symmetry(mansion)</code> that analyzes the mansion's symmetry:<br/><br/>
+<strong>The function should check:</strong><br/>
+1. Is the mansion horizontally symmetric (left-right mirror)?<br/>
+2. Is it vertically symmetric (top-bottom mirror)?<br/>
+3. Count how many cells match their horizontal mirror position<br/><br/>
+<strong>Return:</strong> dictionary with keys:<br/>
+• <code>'horizontal_symmetric'</code> - boolean<br/>
+• <code>'vertical_symmetric'</code> - boolean<br/>
+• <code>'matching_pairs'</code> - integer`,
       starterCode: `def analyze_symmetry(mansion):
     # Your code here
     # Horizontal symmetry: mansion[row][col] == mansion[row][num_cols-1-col]
@@ -891,8 +906,8 @@ Please submit this file in Moodle.
               </div>
 
               <div className="bg-yellow-900 bg-opacity-30 border border-yellow-600 p-3 rounded">
-                <h3 className="font-bold mb-1">📝 Task:</h3>
-                <p className="text-sm">{exercise.task}</p>
+                <h3 className="font-bold mb-2">📝 Task:</h3>
+                <div className="text-sm space-y-2" dangerouslySetInnerHTML={{ __html: exercise.task }} />
               </div>
 
               <div className="mt-4 bg-blue-900 bg-opacity-30 border border-blue-600 p-3 rounded">
